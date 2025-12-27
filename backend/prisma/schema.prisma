@@ -1,0 +1,156 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+// ===== Enums =====
+enum ScheduleType {
+  MANUAL
+  RECURRING
+}
+
+enum ScheduleSource {
+  MANUAL
+  AUTO
+}
+
+enum ReminderLogStatus {
+  PENDING
+  SENT
+  FAILED
+  CANCELLED
+}
+
+enum UserResponse {
+  CONFIRMED
+  CANCELLED
+  NO_RESPONSE
+}
+
+// ===== Models =====
+
+/// מנהלי מערכת
+model AdminUser {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  fullName     String
+  createdAt    DateTime @default(now())
+
+  @@map("admin_users")
+}
+
+/// מתנדבים
+model User {
+  id           String       @id @default(uuid())
+  name         String
+  phone        String       @unique
+  email        String?
+  notes        String?
+  isActive     Boolean      @default(true)
+
+  // Scheduling preferences
+  scheduleType ScheduleType @default(MANUAL)
+  dayOfWeek    Int?
+  frequency    Int?         // e.g., every N weeks
+  weekOfMonth  Int?
+  startDate    DateTime?
+
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  // Relations
+  schedules     Schedule[]
+  reminderLogs  ReminderLog[]
+
+  @@index([isActive])
+  @@map("users")
+}
+
+/// תורנויות
+model Schedule {
+  id        String         @id @default(uuid())
+  userId    String
+  date      DateTime
+  source    ScheduleSource @default(MANUAL)
+  position  Int?
+  createdAt DateTime       @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([date])
+  @@map("schedules")
+}
+
+/// היסטוריית תזכורות
+model ReminderLog {
+  id                String           @id @default(uuid())
+  userId            String
+  scheduledDate     DateTime
+  actualSendDate    DateTime?
+  attemptNumber     Int              @default(0)
+  status            ReminderLogStatus @default(PENDING)
+  isShabbatEarly    Boolean          @default(false)
+
+  userResponse       UserResponse?   @default(NO_RESPONSE)
+  responseReceivedAt DateTime?
+  responseKeyPressed String?
+
+  apiResponse       Json?
+  errorMessage      String?
+  sentAt            DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ivrResponses IvrResponse[]
+
+  @@index([userId])
+  @@index([scheduledDate])
+  @@index([status])
+  @@map("reminder_logs")
+}
+
+/// תגובות IVR מפורטות
+model IvrResponse {
+  id            String   @id @default(uuid())
+  reminderLogId String
+  keyPressed    String
+  pressedAt     DateTime
+  callDuration  Int?
+  yemotCallId   String?
+  rawResponse   Json?
+  createdAt     DateTime @default(now())
+
+  reminderLog ReminderLog @relation(fields: [reminderLogId], references: [id], onDelete: Cascade)
+
+  @@index([reminderLogId])
+  @@map("ivr_responses")
+}
+
+/// הגדרות מערכת
+model Setting {
+  id          String   @id @default(uuid())
+  keyName     String   @unique
+  value       String
+  description String?
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+
+  @@map("settings")
+}
+
+// ===== Notes =====
+// - Database provider is SQL Server. Ensure DATABASE_URL in .env uses a SQL Server connection string
+//   (e.g. "sqlserver://host:1433;database=visit_reminder;user=sa;password=YourPassword;trustServerCertificate=true").
+// - Table names are mapped explicitly (snake_case) via @@map to keep DB naming consistent.
+// - For UTF-8 support configure the database collation to use UTF-8 (e.g., UTF8 or UTF8_GENERAL_CI)
+//   or use NVARCHAR columns when necessary. Prisma DateTime and Json types map appropriately for SQL Server.
+

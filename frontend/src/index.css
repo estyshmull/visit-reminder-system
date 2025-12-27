@@ -1,0 +1,18 @@
+/* Global styles for RTL and basic layout */
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  direction: rtl;
+  font-family: Heebo, Rubik, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f5f7fa;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
