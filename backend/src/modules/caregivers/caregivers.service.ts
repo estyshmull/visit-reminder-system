@@ -6,14 +6,14 @@ export class CaregiversService {
   constructor(private prisma: PrismaService) {}
 
   async findAll() {
-    return this.prisma.caregiver.findMany({
+    return this.prisma.user.findMany({
       where: { isActive: true },
       orderBy: { createdAt: 'desc' },
     })
   }
 
   async findOne(id: string) {
-    return this.prisma.caregiver.findUnique({
+    return this.prisma.user.findUnique({
       where: { id },
       include: {
         visits: {
@@ -24,10 +24,11 @@ export class CaregiversService {
   }
 
   async findAvailable() {
-    return this.prisma.caregiver.findMany({
+    // The schema does not have an explicit caregiver model or `isAvailable`.
+    // Return active users as a proxy for available caregivers.
+    return this.prisma.user.findMany({
       where: {
         isActive: true,
-        isAvailable: true,
       },
     })
   }

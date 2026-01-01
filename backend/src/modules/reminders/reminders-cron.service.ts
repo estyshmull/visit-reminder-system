@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common'
 import { Cron, CronExpression } from '@nestjs/schedule'
 import { PrismaService } from '../../common/prisma/prisma.service'
 import { RemindersService } from './reminders.service'
-import { VisitStatus, ReminderType } from '@prisma/client'
+import { VisitStatus, ReminderType } from '../../common/enums'
 import { addDays, startOfDay } from 'date-fns'
 
 @Injectable()
@@ -30,20 +30,23 @@ export class RemindersCronService {
             gte: tomorrow,
             lt: endOfTomorrow,
           },
-          status: VisitStatus.SCHEDULED,
         },
-        include: {
-          caregiver: true,
-          reminders: true,
-        },
+        include: { user: true },
       })
 
       this.logger.log(`📅 נמצאו ${upcomingVisits.length} ביקורים למחר`)
 
       // Create and send reminders
       for (const visit of upcomingVisits) {
-        // Check if reminder already sent
-        const hasReminder = visit.reminders.some(r => r.sentAt !== null)
+        // Check if a reminder log exists for this user+date and whether it was sent
+        const existing = await this.prisma.reminderLog.findFirst({
+          where: {
+            userId: visit.userId,
+            scheduledDate: visit.scheduledAt,
+          },
+        })
+
+        const hasReminder = existing && existing.sentAt !== null
 
         if (!hasReminder) {
           const reminder = await this.remindersService.createReminder(

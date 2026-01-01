@@ -7,29 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ===== Enums =====
-enum ScheduleType {
-  MANUAL
-  RECURRING
-}
-
-enum ScheduleSource {
-  MANUAL
-  AUTO
-}
-
-enum ReminderLogStatus {
-  PENDING
-  SENT
-  FAILED
-  CANCELLED
-}
-
-enum UserResponse {
-  CONFIRMED
-  CANCELLED
-  NO_RESPONSE
-}
+// NOTE: SQL Server connector in this workspace does not support Prisma's
+// native `Json` or `enum` types. To keep compatibility we store JSON as
+// strings and use plain `String` fields with default string values instead
+// of enums. This avoids schema validation errors when running
+// `prisma generate` with the SQL Server provider.
 
 // ===== Models =====
 
@@ -54,7 +36,7 @@ model User {
   isActive     Boolean      @default(true)
 
   // Scheduling preferences
-  scheduleType ScheduleType @default(MANUAL)
+  scheduleType String       @default("MANUAL")
   dayOfWeek    Int?
   frequency    Int?         // e.g., every N weeks
   weekOfMonth  Int?
@@ -64,44 +46,44 @@ model User {
   updatedAt    DateTime     @updatedAt
 
   // Relations
-  schedules     Schedule[]
+  visits        Visit[]
   reminderLogs  ReminderLog[]
 
   @@index([isActive])
   @@map("users")
 }
 
-/// תורנויות
-model Schedule {
-  id        String         @id @default(uuid())
+/// ביקורים (mapped to DB table `schedules`)
+model Visit {
+  id        String   @id @default(uuid())
   userId    String
-  date      DateTime
-  source    ScheduleSource @default(MANUAL)
+  scheduledAt DateTime @map("date")
+  source    String?  @default("MANUAL")
   position  Int?
-  createdAt DateTime       @default(now())
+  createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, date])
-  @@index([date])
+  @@unique([userId, scheduledAt])
+  @@index([scheduledAt])
   @@map("schedules")
 }
 
 /// היסטוריית תזכורות
 model ReminderLog {
-  id                String           @id @default(uuid())
+  id                String   @id @default(uuid())
   userId            String
   scheduledDate     DateTime
   actualSendDate    DateTime?
-  attemptNumber     Int              @default(0)
-  status            ReminderLogStatus @default(PENDING)
-  isShabbatEarly    Boolean          @default(false)
+  attemptNumber     Int      @default(0)
+  status            String   @default("PENDING")
+  isShabbatEarly    Boolean  @default(false)
 
-  userResponse       UserResponse?   @default(NO_RESPONSE)
+  userResponse       String?  @default("NO_RESPONSE")
   responseReceivedAt DateTime?
   responseKeyPressed String?
 
-  apiResponse       Json?
+  apiResponse       String?
   errorMessage      String?
   sentAt            DateTime?
 
@@ -126,7 +108,7 @@ model IvrResponse {
   pressedAt     DateTime
   callDuration  Int?
   yemotCallId   String?
-  rawResponse   Json?
+  rawResponse   String?
   createdAt     DateTime @default(now())
 
   reminderLog ReminderLog @relation(fields: [reminderLogId], references: [id], onDelete: Cascade)

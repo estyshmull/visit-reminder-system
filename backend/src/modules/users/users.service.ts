@@ -11,10 +11,8 @@ export class UsersService {
     return this.prisma.user.findMany({
       select: {
         id: true,
+        name: true,
         email: true,
-        firstName: true,
-        lastName: true,
-        role: true,
         phone: true,
         isActive: true,
         createdAt: true,
@@ -27,10 +25,8 @@ export class UsersService {
       where: { id },
       select: {
         id: true,
+        name: true,
         email: true,
-        firstName: true,
-        lastName: true,
-        role: true,
         phone: true,
         isActive: true,
         createdAt: true,
@@ -40,9 +36,8 @@ export class UsersService {
   }
 
   async findByEmail(email: string) {
-    return this.prisma.user.findUnique({
-      where: { email },
-    })
+    // Email is not marked unique in the schema, use findFirst instead
+    return this.prisma.user.findFirst({ where: { email } })
   }
 
   // TODO: Implement create, update, remove methods

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../../common/prisma/prisma.service'
-import { VisitStatus } from '@prisma/client'
+import { VisitStatus } from '../../common/enums'
 
 @Injectable()
 export class SchedulesService {
@@ -8,9 +8,7 @@ export class SchedulesService {
 
   async findAll() {
     return this.prisma.visit.findMany({
-      include: {
-        caregiver: true,
-      },
+      include: { user: true },
       orderBy: { scheduledAt: 'asc' },
     })
   }
@@ -21,11 +19,8 @@ export class SchedulesService {
         scheduledAt: {
           gte: new Date(),
         },
-        status: VisitStatus.SCHEDULED,
       },
-      include: {
-        caregiver: true,
-      },
+      include: { user: true },
       orderBy: { scheduledAt: 'asc' },
     })
   }
@@ -44,9 +39,7 @@ export class SchedulesService {
           lte: endOfDay,
         },
       },
-      include: {
-        caregiver: true,
-      },
+      include: { user: true },
       orderBy: { scheduledAt: 'asc' },
     })
   }
@@ -54,10 +47,7 @@ export class SchedulesService {
   async findOne(id: string) {
     return this.prisma.visit.findUnique({
       where: { id },
-      include: {
-        caregiver: true,
-        reminders: true,
-      },
+      include: { user: true },
     })
   }
 

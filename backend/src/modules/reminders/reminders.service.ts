@@ -1,80 +1,60 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../../common/prisma/prisma.service'
-import { ReminderStatus, ReminderType } from '@prisma/client'
+import { ReminderStatus, ReminderType } from '../../common/enums'
 
 @Injectable()
 export class RemindersService {
   constructor(private prisma: PrismaService) {}
 
   async findAll() {
-    return this.prisma.reminder.findMany({
-      include: {
-        visit: {
-          include: {
-            caregiver: true,
-          },
-        },
-      },
+    // Use ReminderLog model from schema
+    return this.prisma.reminderLog.findMany({
+      include: { user: true },
       orderBy: { createdAt: 'desc' },
     })
   }
 
   async findPending() {
-    return this.prisma.reminder.findMany({
-      where: {
-        status: ReminderStatus.PENDING,
-      },
-      include: {
-        visit: {
-          include: {
-            caregiver: true,
-          },
-        },
-      },
+    return this.prisma.reminderLog.findMany({
+      where: { status: ReminderStatus.PENDING },
+      include: { user: true },
     })
   }
 
   async createReminder(visitId: string, type: ReminderType) {
-    return this.prisma.reminder.create({
+    // Map visit -> ReminderLog. Create a reminder record linked to the visit's user.
+    const visit = await this.prisma.visit.findUnique({ where: { id: visitId } })
+    if (!visit) throw new Error('Visit not found')
+
+    return this.prisma.reminderLog.create({
       data: {
-        visitId,
-        type,
+        userId: visit.userId,
+        scheduledDate: visit.scheduledAt,
         status: ReminderStatus.PENDING,
       },
     })
   }
 
   async markAsSent(id: string) {
-    return this.prisma.reminder.update({
+    return this.prisma.reminderLog.update({
       where: { id },
-      data: {
-        status: ReminderStatus.SENT,
-        sentAt: new Date(),
-      },
+      data: { status: ReminderStatus.SENT, sentAt: new Date() },
     })
   }
 
   async markAsFailed(id: string, error: string) {
-    return this.prisma.reminder.update({
+    return this.prisma.reminderLog.update({
       where: { id },
-      data: {
-        status: ReminderStatus.FAILED,
-        error,
-      },
+      // Prisma field name for errors is `errorMessage` in the schema
+      data: { status: ReminderStatus.FAILED, errorMessage: error },
     })
   }
 
   // TODO: Implement actual sending logic (SMS, Email, etc.)
   async sendReminder(reminderId: string) {
-    const reminder = await this.prisma.reminder.findUnique({
+    const reminder = await this.prisma.reminderLog.findUnique({
       where: { id: reminderId },
-      include: {
-        visit: {
-          include: {
-            caregiver: true,
-          },
-        },
-      },
+      include: { user: true },
     })
 
     if (!reminder) {
@@ -82,7 +62,7 @@ export class RemindersService {
     }
 
     // TODO: Implement actual sending logic based on reminder.type
-    console.log(`📧 שליחת תזכורת: ${reminder.type} לביקור ${reminder.visit.id}`)
+    console.log(`📧 שליחת תזכורת ל־user ${reminder.userId} (reminder ${reminder.id})`)
 
     return this.markAsSent(reminderId)
   }
