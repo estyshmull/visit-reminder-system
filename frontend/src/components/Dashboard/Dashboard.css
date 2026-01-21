@@ -1,0 +1,91 @@
+/* עיצוב דף הדשבורד */
+.dashboard-container {
+  min-height: 100vh;
+  background-color: var(--color-gray-50);
+  padding: var(--spacing-xl) var(--spacing-md);
+}
+
+.dashboard-header {
+  max-width: 1200px;
+  margin: 0 auto var(--spacing-2xl);
+  text-align: center;
+}
+
+.dashboard-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-gray-900);
+  margin-bottom: var(--spacing-sm);
+  font-family: var(--font-secondary);
+}
+
+.dashboard-subtitle {
+  font-size: 1.125rem;
+  color: var(--color-gray-600);
+  margin: 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dashboard-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-recent-activity {
+  margin-top: var(--spacing-xl);
+}
+
+.dashboard-error {
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+  background-color: var(--color-white);
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.dashboard-error h2 {
+  color: var(--color-red-500);
+  margin-bottom: var(--spacing-md);
+}
+
+.dashboard-error p {
+  color: var(--color-gray-600);
+  margin-bottom: var(--spacing-xl);
+}
+
+/* רספונסיביות */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: var(--spacing-lg) var(--spacing-sm);
+  }
+  
+  .dashboard-title {
+    font-size: 2rem;
+  }
+  
+  .dashboard-subtitle {
+    font-size: 1rem;
+  }
+  
+  .dashboard-header {
+    margin-bottom: var(--spacing-xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+  
+  .dashboard-title {
+    font-size: 1.75rem;
+  }
+  
+  .dashboard-subtitle {
+    font-size: 0.875rem;
+  }
+}

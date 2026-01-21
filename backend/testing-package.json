@@ -1,0 +1,18 @@
+{
+  "name": "api-testing-suite",
+  "version": "1.0.0",
+  "description": "API testing suite for Visit Reminder System",
+  "main": "test-api.js",
+  "scripts": {
+    "test": "node test-api.js",
+    "test:verbose": "node test-api.js --verbose",
+    "install-deps": "npm install axios colors"
+  },
+  "dependencies": {
+    "axios": "^1.6.5",
+    "colors": "^1.4.0"
+  },
+  "devDependencies": {},
+  "author": "Visit Reminder System",
+  "license": "MIT"
+}

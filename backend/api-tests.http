@@ -1,0 +1,202 @@
+### Visit Reminder System API Testing
+### Save as: api-tests.http
+### Usage: Install REST Client extension in VSCode and run each request
+
+@baseUrl = http://localhost:3001/api
+@contentType = application/json
+
+###
+# Step 1: Health Check
+GET {{baseUrl}}/health
+
+###
+# Step 2: Create Test User
+POST {{baseUrl}}/auth/create-test-user
+Content-Type: {{contentType}}
+
+###
+# Step 3: Login and Get Token
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "test@example.com",
+  "password": "Test123!"
+}
+
+###
+# Extract token for use in subsequent requests
+@authToken = {{login.response.body.access_token}}
+
+###
+# Step 4: Test Protected Endpoints - Users
+
+# Get All Users
+GET {{baseUrl}}/users
+Authorization: Bearer {{authToken}}
+
+###
+# Get Specific User
+GET {{baseUrl}}/users/test-user-123
+Authorization: Bearer {{authToken}}
+
+###
+# Create User
+POST {{baseUrl}}/users
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "name": "New Test User",
+  "email": "newuser@example.com",
+  "phone": "+972501234567"
+}
+
+###
+# Update User
+PATCH {{baseUrl}}/users/test-user-123
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Updated Test User"
+}
+
+###
+# Delete User
+DELETE {{baseUrl}}/users/test-user-123
+Authorization: Bearer {{authToken}}
+
+###
+# Step 5: Test Other Module Endpoints
+
+# Get Schedules
+GET {{baseUrl}}/schedules
+Authorization: Bearer {{authToken}}
+
+###
+# Create Schedule
+POST {{baseUrl}}/schedules
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "userId": "test-user-123",
+  "scheduledAt": "2026-01-15T10:00:00Z",
+  "source": "MANUAL"
+}
+
+###
+# Get Upcoming Schedules
+GET {{baseUrl}}/schedules/upcoming
+Authorization: Bearer {{authToken}}
+
+###
+# Get Schedules by Date
+GET {{baseUrl}}/schedules/by-date?date=2026-01-15
+Authorization: Bearer {{authToken}}
+
+###
+# Get Specific Schedule
+GET {{baseUrl}}/schedules/some-id
+Authorization: Bearer {{authToken}}
+
+###
+# Get Visits (mapped to schedules in DB)
+GET {{baseUrl}}/visits
+Authorization: Bearer {{authToken}}
+
+###
+# Get Reminders
+GET {{baseUrl}}/reminders
+Authorization: Bearer {{authToken}}
+
+###
+# Get Pending Reminders
+GET {{baseUrl}}/reminders/pending
+Authorization: Bearer {{authToken}}
+
+###
+# Send Reminder
+POST {{baseUrl}}/reminders/some-id/send
+Authorization: Bearer {{authToken}}
+
+###
+# Get Reports Overview
+GET {{baseUrl}}/reports/overview
+Authorization: Bearer {{authToken}}
+
+###
+# Get Monthly Reports
+GET {{baseUrl}}/reports/monthly?year=2026&month=1
+Authorization: Bearer {{authToken}}
+
+###
+# Get Caregivers Reports
+GET {{baseUrl}}/reports/caregivers
+Authorization: Bearer {{authToken}}
+
+###
+# Step 6: Security Tests
+
+# Test without token (should return 401)
+GET {{baseUrl}}/users
+
+###
+# Test with invalid token (should return 401)
+GET {{baseUrl}}/users
+Authorization: Bearer invalid-token-12345
+
+###
+# Test registration endpoint
+POST {{baseUrl}}/auth/register
+Content-Type: {{contentType}}
+
+{
+  "name": "New User",
+  "email": "register@example.com",
+  "password": "Password123!",
+  "phone": "+972501111111"
+}
+
+###
+# Additional User Tests
+
+# Find user by email (if implemented)
+GET {{baseUrl}}/users/search?email=test@example.com
+Authorization: Bearer {{authToken}}
+
+###
+# User profile endpoint (if implemented)
+GET {{baseUrl}}/users/profile
+Authorization: Bearer {{authToken}}
+
+###
+# Update user password (if implemented)
+PATCH {{baseUrl}}/users/change-password
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "currentPassword": "Test123!",
+  "newPassword": "NewPassword123!"
+}
+
+###
+# Test with different role endpoints
+
+# Admin only endpoint test
+GET {{baseUrl}}/admin/users
+Authorization: Bearer {{authToken}}
+
+###
+# Manager role test
+POST {{baseUrl}}/users
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+  "name": "Manager Created User",
+  "email": "manager@example.com"
+}

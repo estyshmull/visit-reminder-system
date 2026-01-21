@@ -19,6 +19,14 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       return true
     }
 
+    // Development helper: disable auth entirely when DISABLE_AUTH=true
+    if (process.env.DISABLE_AUTH === 'true') {
+      const req = context.switchToHttp().getRequest()
+      // Inject a fake admin user so RolesGuard also passes for protected endpoints
+      req.user = { id: 'dev-user', role: 'ADMIN' }
+      return true
+    }
+
     return super.canActivate(context)
   }
 }

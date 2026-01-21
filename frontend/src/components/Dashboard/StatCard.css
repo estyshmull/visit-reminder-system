@@ -1,0 +1,113 @@
+/* עיצוב כרטיס סטטיסטיקה */
+.stat-card {
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-gray-200);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  overflow: hidden;
+}
+
+.stat-card-clickable {
+  cursor: pointer;
+}
+
+.stat-card-clickable:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+  border-color: var(--color-blue-300);
+}
+
+.stat-card-clickable:active {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-card-content {
+  padding: var(--spacing-xl);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-card-header {
+  margin-bottom: var(--spacing-md);
+}
+
+.stat-card-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-gray-600);
+  margin: 0;
+  text-align: right;
+}
+
+.stat-card-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.stat-card-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-gray-900);
+  line-height: 1;
+  font-family: var(--font-secondary);
+}
+
+.stat-card-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 2.5rem;
+}
+
+.stat-card-footer {
+  margin-top: auto;
+}
+
+.stat-card-subtitle {
+  font-size: 0.75rem;
+  color: var(--color-gray-500);
+  margin: 0;
+  text-align: right;
+  line-height: 1.4;
+}
+
+/* אפקטים מיוחדים */
+.stat-card-clickable:focus-visible {
+  outline: 2px solid var(--color-blue-500);
+  outline-offset: 2px;
+}
+
+/* רספונסיביות */
+@media (max-width: 768px) {
+  .stat-card-content {
+    padding: var(--spacing-lg);
+  }
+  
+  .stat-card-value {
+    font-size: 2rem;
+  }
+  
+  .stat-card-title {
+    font-size: 0.8125rem;
+  }
+  
+  .stat-card-subtitle {
+    font-size: 0.6875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stat-card-content {
+    padding: var(--spacing-md);
+  }
+  
+  .stat-card-value {
+    font-size: 1.75rem;
+  }
+}

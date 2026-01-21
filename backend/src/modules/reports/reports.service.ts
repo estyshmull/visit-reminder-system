@@ -8,15 +8,15 @@ export class ReportsService {
   constructor(private prisma: PrismaService) {}
 
   async getOverview() {
-    // Map caregivers to active users in the current schema
-    const [totalCaregivers, totalVisits, pendingVisits] = await Promise.all([
-      this.prisma.user.count({ where: { isActive: true } }),
+    // ספירת מבקרים פעילים
+    const [totalVisitors, totalVisits, pendingVisits] = await Promise.all([
+      this.prisma.visitor.count({ where: { isActive: true } }),
       this.prisma.visit.count(),
       // Count upcoming visits (scheduled in the future) as "pending"
       this.prisma.visit.count({ where: { scheduledAt: { gte: new Date() } } }),
     ])
 
-    return { totalCaregivers, totalVisits, pendingVisits }
+    return { totalVisitors, totalVisits, pendingVisits }
   }
 
   async getMonthlyStats(year: number, month: number) {
@@ -35,9 +35,9 @@ export class ReportsService {
     return { period: { year, month, startDate, endDate }, totalVisits: total }
   }
 
-  async getCaregiverStats() {
-    // Use users as caregivers proxy and count past visits as "completed"
-    const caregivers = await this.prisma.user.findMany({
+  async getVisitorStats() {
+    // סטטיסטיקות מבקרים
+    const visitors = await this.prisma.visitor.findMany({
       where: { isActive: true },
       include: {
         visits: true,
@@ -45,10 +45,10 @@ export class ReportsService {
     })
 
     const now = new Date()
-    return caregivers.map((c: any) => ({
-      id: c.id,
-      name: c.name,
-      completedVisits: c.visits.filter((v: any) => v.scheduledAt < now).length,
+    return visitors.map((v: any) => ({
+      id: v.id,
+      name: v.name,
+      completedVisits: v.visits.filter((visit: any) => visit.scheduledAt < now).length,
       isAvailable: true,
     }))
   }

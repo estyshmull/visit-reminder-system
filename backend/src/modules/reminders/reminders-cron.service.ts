@@ -31,7 +31,7 @@ export class RemindersCronService {
             lt: endOfTomorrow,
           },
         },
-        include: { user: true },
+        include: { visitor: true },
       })
 
       this.logger.log(`📅 נמצאו ${upcomingVisits.length} ביקורים למחר`)

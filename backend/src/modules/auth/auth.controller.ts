@@ -1,10 +1,39 @@
-import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common'
-import { ApiTags, ApiOperation, ApiBody } from '@nestjs/swagger'
+import { Controller, Post, Body } from '@nestjs/common'
+import { ApiTags, ApiOperation, ApiProperty } from '@nestjs/swagger'
 import { AuthService } from './auth.service'
 import { Public } from '../../common/decorators/public.decorator'
-// import { LocalAuthGuard } from './guards/local-auth.guard'
-// import { LoginDto } from './dto/login.dto'
-// import { RegisterDto } from './dto/register.dto'
+import { IsString, IsNotEmpty, MinLength } from 'class-validator'
+
+class LoginDto {
+  @ApiProperty({ example: 'admin' })
+  @IsString()
+  @IsNotEmpty()
+  username: string
+
+  @ApiProperty({ example: 'Admin123!' })
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(6)
+  password: string
+}
+
+class SetupFirstAdminDto {
+  @ApiProperty({ example: 'admin' })
+  @IsString()
+  @IsNotEmpty()
+  username: string
+
+  @ApiProperty({ example: 'Admin123!' })
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(6)
+  password: string
+
+  @ApiProperty({ example: 'אסתי אסבן' })
+  @IsString()
+  @IsNotEmpty()
+  fullName: string
+}
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -13,18 +42,19 @@ export class AuthController {
 
   @Public()
   @Post('login')
-  @ApiOperation({ summary: 'התחברות למערכת' })
-  // @UseGuards(LocalAuthGuard)
-  async login(@Body() loginDto: any) {
-    // TODO: Implement login
-    return { message: 'Login endpoint - to be implemented' }
+  @ApiOperation({ summary: 'התחברות מנהל למערכת' })
+  async login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto.username, loginDto.password)
   }
 
   @Public()
-  @Post('register')
-  @ApiOperation({ summary: 'רישום משתמש חדש' })
-  async register(@Body() registerDto: any) {
-    // TODO: Implement registration
-    return { message: 'Register endpoint - to be implemented' }
+  @Post('setup-first-admin')
+  @ApiOperation({ summary: 'יצירת מנהל ראשון במערכת (פעם אחת בלבד)' })
+  async setupFirstAdmin(@Body() setupDto: SetupFirstAdminDto) {
+    return this.authService.setupFirstAdmin(
+      setupDto.username,
+      setupDto.password,
+      setupDto.fullName
+    )
   }
 }

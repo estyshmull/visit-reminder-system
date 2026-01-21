@@ -14,10 +14,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
+    // TODO: כשנחזיר הרשאות, נוסיף כאן שליפה מהדאטה בייס
     return {
       id: payload.sub,
-      email: payload.email,
-      role: payload.role,
+      username: payload.username,
+      fullName: payload.fullName,
     }
   }
 }

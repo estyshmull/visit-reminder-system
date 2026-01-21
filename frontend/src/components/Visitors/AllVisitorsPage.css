@@ -1,0 +1,205 @@
+/* עיצוב דף כל המבקרים */
+.visitors-page-container {
+  min-height: 100vh;
+  background-color: var(--color-gray-50);
+  padding: var(--spacing-xl) var(--spacing-md);
+}
+
+.visitors-page-header {
+  max-width: 1200px;
+  margin: 0 auto var(--spacing-xl);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-lg);
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-gray-900);
+  margin: 0;
+  font-family: var(--font-secondary);
+}
+
+.filters-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-gray-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.search-section {
+  flex: 1;
+  max-width: 400px;
+}
+
+.filter-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-lg);
+}
+
+.sort-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.sort-controls label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-gray-700);
+}
+
+.sort-controls select {
+  min-width: 180px;
+}
+
+.results-summary {
+  text-align: center;
+  color: var(--color-gray-600);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.results-summary strong {
+  color: var(--color-gray-900);
+  font-weight: 600;
+}
+
+.visitors-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+/* מצבי טעינה ושגיאות */
+.loading-container,
+.error-container {
+  max-width: 400px;
+  margin: var(--spacing-2xl) auto;
+  text-align: center;
+  background-color: var(--color-white);
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.error-container h2 {
+  color: var(--color-red-500);
+  margin-bottom: var(--spacing-md);
+}
+
+.error-container p {
+  color: var(--color-gray-600);
+  margin-bottom: var(--spacing-xl);
+}
+
+/* מצב ריק */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  background-color: var(--color-white);
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-lg);
+  border: 2px dashed var(--color-gray-300);
+  margin: var(--spacing-xl) 0;
+}
+
+.empty-state h3 {
+  color: var(--color-gray-700);
+  margin-bottom: var(--spacing-sm);
+}
+
+.empty-state p {
+  color: var(--color-gray-500);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* רספונסיביות */
+@media (max-width: 1024px) {
+  .visitors-grid {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 768px) {
+  .visitors-page-container {
+    padding: var(--spacing-lg) var(--spacing-sm);
+  }
+  
+  .header-top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-md);
+  }
+  
+  .page-title {
+    font-size: 1.75rem;
+    text-align: center;
+  }
+  
+  .filters-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+  }
+  
+  .search-section {
+    max-width: none;
+  }
+  
+  .filter-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-md);
+  }
+  
+  .sort-controls select {
+    min-width: auto;
+  }
+  
+  .visitors-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .visitors-page-container {
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+  
+  .page-title {
+    font-size: 1.5rem;
+  }
+  
+  .filters-row {
+    padding: var(--spacing-sm);
+  }
+  
+  .visitors-page-header {
+    margin-bottom: var(--spacing-md);
+  }
+}

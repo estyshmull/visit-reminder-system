@@ -1,0 +1,253 @@
+.edit-visitor-modal .visitor-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.form-input {
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 0.9375rem;
+  color: var(--text-color);
+  background-color: var(--surface-bg);
+  transition: all 0.2s ease;
+  direction: rtl;
+  text-align: right;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px var(--primary-color-alpha);
+}
+
+.form-input.error {
+  border-color: var(--error-color);
+  background-color: var(--error-bg);
+}
+
+.form-input.error:focus {
+  border-color: var(--error-color);
+  box-shadow: 0 0 0 3px var(--error-color-alpha);
+}
+
+.form-input:disabled {
+  background-color: var(--bg-muted);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+  direction: rtl;
+  text-align: right;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}
+
+.error-message {
+  font-size: 0.8125rem;
+  color: var(--error-color);
+  font-weight: 500;
+  margin-top: 0.25rem;
+}
+
+/* Checkbox Group */
+.checkbox-group {
+  gap: 0.75rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  color: var(--text-color);
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 1.125rem;
+  height: 1.125rem;
+  margin: 0;
+  cursor: pointer;
+  accent-color: var(--primary-color);
+}
+
+.checkbox-text {
+  font-weight: 500;
+}
+
+.help-text {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: flex-end;
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-color);
+  margin-top: var(--spacing-md);
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--primary-color-alpha);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background-color: var(--surface-bg);
+  color: var(--text-muted);
+  border-color: var(--border-color);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--bg-muted);
+  color: var(--text-color);
+  border-color: var(--text-muted);
+}
+
+/* רספונסיביות */
+@media (max-width: 480px) {
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+}
+
+/* מצב כהה */
+@media (prefers-color-scheme: dark) {
+  .form-label {
+    color: var(--dark-text);
+  }
+  
+  .form-input {
+    background-color: var(--dark-surface);
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+  }
+  
+  .form-input:focus {
+    border-color: var(--primary-color);
+  }
+  
+  .form-input:disabled {
+    background-color: var(--dark-bg-muted);
+    color: var(--dark-text-muted);
+  }
+  
+  .form-input::placeholder {
+    color: var(--dark-text-muted);
+  }
+  
+  .checkbox-label {
+    color: var(--dark-text);
+  }
+  
+  .help-text {
+    color: var(--dark-text-muted);
+  }
+  
+  .form-actions {
+    border-color: var(--dark-border);
+  }
+  
+  .btn-secondary {
+    background-color: var(--dark-surface);
+    color: var(--dark-text-muted);
+    border-color: var(--dark-border);
+  }
+  
+  .btn-secondary:hover:not(:disabled) {
+    background-color: var(--dark-bg-muted);
+    color: var(--dark-text);
+  }
+}
+
+/* אנימציות */
+.form-input:focus {
+  animation: input-focus 0.3s ease-out;
+}
+
+@keyframes input-focus {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.01);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.btn:active:not(:disabled) {
+  animation: button-press 0.15s ease-out;
+}
+
+@keyframes button-press {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

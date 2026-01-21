@@ -29,11 +29,11 @@ export class ReportsController {
     return this.reportsService.getMonthlyStats(parseInt(year), parseInt(month))
   }
 
-  @Get('caregivers')
+  @Get('visitors')
   @Roles(UserRole.ADMIN, UserRole.MANAGER)
-  @ApiOperation({ summary: 'סטטיסטיקות מטפלים' })
-  getCaregiverStats() {
-    return this.reportsService.getCaregiverStats()
+  @ApiOperation({ summary: 'סטטיסטיקות מבקרים' })
+  getVisitorStats() {
+    return this.reportsService.getVisitorStats()
   }
 
 }

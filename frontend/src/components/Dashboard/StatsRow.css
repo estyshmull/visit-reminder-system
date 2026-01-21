@@ -1,0 +1,30 @@
+/* עיצוב שורת הסטטיסטיקות */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+  width: 100%;
+}
+
+/* רספונסיביות */
+@media (max-width: 1024px) {
+  .stats-row {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-row {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-row {
+    gap: var(--spacing-sm);
+  }
+}

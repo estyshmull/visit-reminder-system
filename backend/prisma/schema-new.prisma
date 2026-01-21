@@ -1,0 +1,142 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== ENUMS ====================
+
+/// תפקידי מנהלים
+enum AdminRole {
+  SUPER_ADMIN  // יכול להוסיף/למחוק מנהלים + כל השאר
+  ADMIN        // יכול לנהל רק לקוחות וביקורים
+}
+
+/// סטטוסים של ביקור
+enum VisitStatus {
+  SCHEDULED    // מתוכנן
+  IN_PROGRESS  // בביצוע
+  COMPLETED    // הושלם
+  CANCELLED    // בוטל
+  NO_SHOW      // לא הגיע
+}
+
+/// סוגי תזכורות
+enum ReminderType {
+  SMS
+  EMAIL
+  BOTH
+}
+
+/// סטטוסים של תזכורת
+enum ReminderStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+// ==================== MODELS ====================
+
+/// מנהלי מערכת - המשתמשים של המערכת (עם סיסמה)
+model Admin {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String    // מוצפן עם bcrypt
+  name      String
+  role      AdminRole @default(ADMIN)
+  isActive  Boolean   @default(true)
+  
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  
+  // מנהל יכול ליצור ביקורים
+  createdVisits Visit[] @relation("CreatedByAdmin")
+
+  @@map("admins")
+}
+
+/// לקוחות/מבקרים - אנשים שמבקרים אצלם (ללא סיסמה, לא משתמשים!)
+model Client {
+  id          String   @id @default(uuid())
+  name        String
+  phone       String   @unique
+  email       String?
+  address     String?
+  notes       String?
+  isActive    Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // לקוח יכול להיות בביקורים רבים
+  visits      Visit[]
+
+  @@index([phone])
+  @@index([isActive])
+  @@map("clients")
+}
+
+/// ביקורים
+model Visit {
+  id          String      @id @default(uuid())
+  
+  // קשר ללקוח
+  clientId    String
+  client      Client      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  
+  // מי יצר את הביקור (מנהל)
+  createdById String
+  createdBy   Admin       @relation("CreatedByAdmin", fields: [createdById], references: [id])
+  
+  // פרטי הביקור
+  date        DateTime
+  startTime   String      // "10:00"
+  endTime     String      // "11:00"
+  status      VisitStatus @default(SCHEDULED)
+  notes       String?
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  // תזכורות לביקור
+  reminders   Reminder[]
+
+  @@index([clientId])
+  @@index([createdById])
+  @@index([date])
+  @@index([status])
+  @@map("visits")
+}
+
+/// תזכורות אוטומטיות
+model Reminder {
+  id            String         @id @default(uuid())
+  
+  // קשר לביקור
+  visitId       String
+  visit         Visit          @relation(fields: [visitId], references: [id], onDelete: Cascade)
+  
+  // פרטי התזכורת
+  scheduledFor  DateTime       // מתי לשלוח
+  message       String
+  type          ReminderType   @default(SMS)
+  status        ReminderStatus @default(PENDING)
+  sentAt        DateTime?
+  
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([visitId])
+  @@index([status])
+  @@index([scheduledFor])
+  @@map("reminders")
+}
+
+// ==================== NOTES ====================
+// - Admin: מנהלי מערכת שיכולים להתחבר (עם email + password)
+// - Client: לקוחות/מבקרים שלא יכולים להתחבר (רק name + phone)
+// - Visit: ביקור של מנהל אצל לקוח
+// - Reminder: תזכורת אוטומטית לפני ביקור

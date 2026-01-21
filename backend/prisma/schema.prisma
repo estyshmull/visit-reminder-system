@@ -26,43 +26,43 @@ model AdminUser {
   @@map("admin_users")
 }
 
-/// מתנדבים
-model User {
+/// מבקרים - אנשים שמבקרים אצל סבתא (אין להם גישה למערכת)
+model Visitor {
   id           String       @id @default(uuid())
-  name         String
-  phone        String       @unique
-  email        String?
-  notes        String?
-  isActive     Boolean      @default(true)
+  name         String       // שם המבקר
+  phone        String       @unique // טלפון למשלוח תזכורות
+  email        String?      // אימייל (אופציונלי)
+  notes        String?      // הערות נוספות
+  isActive     Boolean      @default(true) // האם המבקר פעיל
 
-  // Scheduling preferences
-  scheduleType String       @default("MANUAL")
-  dayOfWeek    Int?
-  frequency    Int?         // e.g., every N weeks
-  weekOfMonth  Int?
-  startDate    DateTime?
+  // העדפות תדירות ביקורים
+  scheduleType String       @default("MANUAL") // סוג התזמון
+  dayOfWeek    Int?         // יום בשבוע (0-6)
+  frequency    Int?         // תדירות - כל כמה שבועות
+  weekOfMonth  Int?         // שבוע בחודש
+  startDate    DateTime?    // תאריך התחלה
 
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 
-  // Relations
-  visits        Visit[]
-  reminderLogs  ReminderLog[]
+  // קשרים
+  visits        Visit[]      // ביקורים של המבקר
+  reminderLogs  ReminderLog[] // תזכורות שנשלחו
 
   @@index([isActive])
   @@map("users")
 }
 
-/// ביקורים (mapped to DB table `schedules`)
+/// ביקורים מתוזמנים
 model Visit {
   id        String   @id @default(uuid())
-  userId    String
-  scheduledAt DateTime @map("date")
-  source    String?  @default("MANUAL")
-  position  Int?
+  userId    String   // קישור למבקר
+  scheduledAt DateTime @map("date") // מועד הביקור המתוכנן
+  source    String?  @default("MANUAL") // מקור היצירה (ידני/אוטומטי)
+  position  Int?     // מיקום בסדר
   createdAt DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  visitor Visitor @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, scheduledAt])
   @@index([scheduledAt])
@@ -72,7 +72,7 @@ model Visit {
 /// היסטוריית תזכורות
 model ReminderLog {
   id                String   @id @default(uuid())
-  userId            String
+  userId            String   // קישור למבקר
   scheduledDate     DateTime
   actualSendDate    DateTime?
   attemptNumber     Int      @default(0)
@@ -91,7 +91,7 @@ model ReminderLog {
   updatedAt DateTime @updatedAt
 
   // Relations
-  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  visitor      Visitor      @relation(fields: [userId], references: [id], onDelete: Cascade)
   ivrResponses IvrResponse[]
 
   @@index([userId])

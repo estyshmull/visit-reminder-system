@@ -1,0 +1,247 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  backdrop-filter: blur(2px);
+  animation: modal-backdrop-in 0.2s ease-out;
+}
+
+@keyframes modal-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal {
+  background-color: var(--surface-bg);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-heavy);
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: modal-in 0.3s ease-out;
+  border: 1px solid var(--border-color);
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-muted);
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.modal-close {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background-color: var(--error-bg);
+  color: var(--error-color);
+}
+
+.modal-close:focus {
+  outline: none;
+  background-color: var(--primary-bg);
+  color: var(--primary-color);
+  box-shadow: 0 0 0 3px var(--primary-color-alpha);
+}
+
+.modal-close:active {
+  transform: scale(0.95);
+}
+
+.modal-body {
+  padding: var(--spacing-lg);
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+/* רספונסיביות */
+@media (max-width: 768px) {
+  .modal-backdrop {
+    padding: var(--spacing-md);
+    align-items: flex-end;
+  }
+  
+  .modal {
+    max-height: 95vh;
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    animation: modal-mobile-in 0.3s ease-out;
+  }
+  
+  @keyframes modal-mobile-in {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .modal-header {
+    padding: var(--spacing-md);
+  }
+  
+  .modal-title {
+    font-size: 1.125rem;
+  }
+  
+  .modal-body {
+    padding: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-backdrop {
+    padding: 0;
+  }
+  
+  .modal {
+    border-radius: 0;
+    max-height: 100vh;
+    height: 100vh;
+  }
+}
+
+/* מצב כהה */
+@media (prefers-color-scheme: dark) {
+  .modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  
+  .modal {
+    background-color: var(--dark-surface);
+    border-color: var(--dark-border);
+  }
+  
+  .modal-header {
+    background-color: var(--dark-bg-muted);
+    border-color: var(--dark-border);
+  }
+  
+  .modal-title {
+    color: var(--dark-text);
+  }
+  
+  .modal-close {
+    color: var(--dark-text-muted);
+  }
+  
+  .modal-close:hover {
+    background-color: var(--error-bg);
+    color: var(--error-color);
+  }
+  
+  .modal-close:focus {
+    background-color: var(--primary-bg);
+    color: var(--primary-color);
+  }
+}
+
+/* אימציות יציאה */
+.modal-backdrop.closing {
+  animation: modal-backdrop-out 0.2s ease-in;
+}
+
+.modal.closing {
+  animation: modal-out 0.2s ease-in;
+}
+
+@keyframes modal-backdrop-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes modal-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+}
+
+/* עיצוב מיוחד למודלים קטנים */
+.modal.compact {
+  max-width: 400px;
+}
+
+.modal.compact .modal-header {
+  padding: var(--spacing-md);
+}
+
+.modal.compact .modal-title {
+  font-size: 1.125rem;
+}
+
+.modal.compact .modal-body {
+  padding: var(--spacing-md);
+}
+
+/* עיצוב למודלים גדולים */
+.modal.large {
+  max-width: 800px;
+}
+
+.modal.extra-large {
+  max-width: 1200px;
+}
+
+/* עיצוב למודלים בגובה מלא */
+.modal.full-height {
+  max-height: 95vh;
+  height: 95vh;
+}
