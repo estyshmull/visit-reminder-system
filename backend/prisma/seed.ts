@@ -36,7 +36,7 @@ async function main() {
   const bob = await prisma.visitor.create({
     data: {
       name: 'Bob Levi',
-      phone: 'YOUR_PHONE_NUMBER_HERE',  // החלף במספר שלך
+      phone: '+97256727386',  // החלף במספר שלך
       email: 'bob@example.com',
       isActive: true,
     },

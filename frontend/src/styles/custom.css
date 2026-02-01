@@ -1,0 +1,170 @@
+/* Custom CSS for Visit Reminder System */
+
+/* Colors */
+:root {
+  --primary-color: #3B82F6;
+  --secondary-color: #8B5CF6;
+  --background-color: #FFFFFF;
+  --background-light: #F9FAFB;
+  --background-lighter: #F3F4F6;
+  --text-color: #1F2937;
+  --text-secondary: #374151;
+  --success-color: #10B981;
+  --error-color: #EF4444;
+}
+
+/* Typography */
+body {
+  font-family: 'Heebo', sans-serif;
+  color: var(--text-color);
+  background-color: var(--background-light);
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Heebo', sans-serif;
+  color: var(--text-color);
+}
+
+/* Visitor Card */
+.visitor-card {
+  background: var(--background-color);
+  /* Custom Design System - Visit Reminder System
+     Implements design principles requested: modern, soft, lively.
+  */
+
+  /* Import fonts (Heebo/Assistant fallback to system sans) */
+  @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700&display=swap');
+
+  :root {
+    /* Palette */
+    --primary-500: #3B82F6; /* main blue */
+    --primary-400: #60A5FA;
+    --primary-300: #93C5FD;
+    --accent-500: #8B5CF6; /* purple */
+    --accent-400: #A78BFA;
+    --teal-500: #06B6D4; /* alternate */
+
+    --bg: #FFFFFF; /* white */
+    --bg-100: #F9FAFB;
+    --bg-200: #F3F4F6;
+
+    --text-900: #1F2937; /* heading */
+    --text-700: #374151; /* body */
+    --muted: #6B7280;
+
+    --success: #10B981;
+    --danger: #EF4444;
+
+    /* radii */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+
+    /* shadows */
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+    --shadow-lg: 0 4px 16px rgba(0,0,0,0.12);
+
+    /* spacing */
+    --gap-sm: 12px;
+    --gap-md: 20px;
+    --gap-lg: 32px;
+  }
+
+  /* Base */
+  html, body, #root {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    font-family: 'Heebo', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    background: var(--bg-100);
+    color: var(--text-900);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  /* Headings and text scale */
+  h1 { font-size: 24px; font-weight: 700; color: var(--text-900); margin: 0 0 8px 0; }
+  h2 { font-size: 20px; font-weight: 600; margin: 0 0 8px 0; }
+  p, li, span, label { font-size: 16px; color: var(--text-700); margin: 0; }
+  .muted { color: var(--muted); font-size: 14px; }
+
+  /* Transitions and interactions */
+  .anim-smooth { transition: all 0.3s ease; }
+
+  /* Layout helper classes */
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+  .grid { display: grid; gap: var(--gap-md); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(180deg, var(--primary-500), #2563EB);
+    color: white; border: none; padding: 10px 16px; border-radius: 10px; cursor: pointer;
+    box-shadow: var(--shadow-sm); transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.25s ease;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .btn:active { transform: scale(0.98); }
+  .btn.secondary { background: linear-gradient(180deg, var(--accent-500), var(--accent-400)); }
+
+  /* Card base */
+  .card {
+    background: var(--bg);
+    border: 1px solid #E5E7EB;
+    border-radius: var(--radius-md);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+  }
+
+  /* Visitor card (exact example you provided) */
+  .visitor-card { cursor: pointer; }
+  .visitor-card:hover {
+    background: #EFF6FF; /* very light primary */
+    border-color: var(--primary-500);
+    box-shadow: 0 4px 16px rgba(59,130,246,0.15);
+    transform: translateY(-2px);
+  }
+  .visitor-card:active { background: #DBEAFE; transform: scale(0.98); }
+
+  .visitor-row { display:flex; align-items:center; gap:12px; }
+  .avatar { width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,var(--primary-300),var(--primary-400)); display:flex; align-items:center; justify-content:center; color:white; font-weight:600; }
+
+  /* Stats card with soft gradient */
+  .stats-card {
+    color: white; border: none; overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* subtle gradient */
+    box-shadow: var(--shadow-sm);
+  }
+  .stats-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .stats-title { font-size: 14px; opacity: 0.9; }
+  .stats-value { font-size: 28px; font-weight:700; margin-top:8px; }
+
+  /* Alerts and badges */
+  .badge { display:inline-block; padding:6px 10px; border-radius:999px; font-size:13px; }
+  .badge.success { background: rgba(16,185,129,0.12); color: var(--success); }
+  .badge.error { background: rgba(239,68,68,0.12); color: var(--danger); }
+
+  /* Sidebar / layout adjustments (light) */
+  .app-header { background: var(--bg); border-bottom:1px solid #EEF2FF; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; box-shadow: var(--shadow-sm); }
+
+  /* helpers for spacing */
+  .mt-lg { margin-top: 40px; }
+  .mb-md { margin-bottom: 20px; }
+
+  /* small responsive tweaks */
+  @media (max-width: 900px) {
+    .grid-3 { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+
+  /* Utility: subtle focus outline for accessibility */
+  :focus { outline: 2px solid rgba(59,130,246,0.18); outline-offset: 2px; }
+
+  /* End of design system */}

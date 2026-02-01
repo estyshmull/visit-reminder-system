@@ -12,4 +12,10 @@ export class AppController {
   getHealth() {
     return this.appService.getHealth()
   }
+
+  @Get()
+  @ApiOperation({ summary: 'Default endpoint' })
+  getDefault() {
+    return { message: 'Welcome to the Visit Reminder System API!' }
+  }
 }

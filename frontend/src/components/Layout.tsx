@@ -1,58 +1,26 @@
-import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import './Layout.css';
 
-interface LayoutProps {
-  children: React.ReactNode
-}
-
-// אייקונים פשוטים כ-Unicode
-const Icons = {
-  dashboard: '📊',
-  visitors: '👥',
-  calendar: '📅',
-  reminders: '🔔',
-  reports: '📈',
-  settings: '⚙️',
-  home: '🏠',
-  phone: '📞',
-  email: '✉️',
-  add: '➕',
-  edit: '✏️',
-  delete: '🗑️',
-  save: '💾',
-  cancel: '❌',
-  check: '✅',
-  warning: '⚠️',
-  info: 'ℹ️',
-  success: '✅',
-  error: '❌',
-  loading: '⏳',
-}
-
-const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const location = useLocation()
+const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const location = useLocation();
 
   const navigationItems = [
-    { path: '/dashboard', label: 'דשבורד', icon: Icons.dashboard },
-    { path: '/visitors', label: 'מבקרים', icon: Icons.visitors },
-    { path: '/calendar', label: 'לוח שנה', icon: Icons.calendar },
-    { path: '/reminders', label: 'תזכורות', icon: Icons.reminders },
-    { path: '/reports', label: 'דוחות', icon: Icons.reports },
-    { path: '/settings', label: 'הגדרות', icon: Icons.settings },
-  ]
+    { path: '/dashboard', label: 'דשבורד' },
+    { path: '/visitors', label: 'מבקרים' },
+    { path: '/calendar', label: 'לוח שנה' },
+    { path: '/reminders', label: 'תזכורות' },
+    { path: '/reports', label: 'דוחות' },
+    { path: '/settings', label: 'הגדרות' },
+  ];
 
-  const isActive = (path: string) => location.pathname === path
+  const isActive = (path: string) => location.pathname === path;
 
   return (
-    <div className="app">
+    <div>
       {/* Header */}
       <header className="header">
-        <h1>
-          {Icons.home} מערכת ביקורים אצל סבתא
-        </h1>
-        <p className="header-subtitle">
-          ניהול ותיאום ביקורים עם תזכורות אוטומטיות
-        </p>
+        <h1>מערכת תזכורות ביקורים</h1>
       </header>
 
       {/* Navigation */}
@@ -64,8 +32,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 to={item.path}
                 className={`nav-link ${isActive(item.path) ? 'active' : ''}`}
               >
-                <span className="nav-icon">{item.icon}</span>
-                <span>{item.label}</span>
+                {item.label}
               </Link>
             </li>
           ))}
@@ -73,23 +40,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </nav>
 
       {/* Main Content */}
-      <main className="main-content">
-        {children}
-      </main>
-
-      {/* Footer */}
-      <footer style={{ 
-        textAlign: 'center', 
-        padding: 'var(--spacing-lg)', 
-        color: 'var(--text-muted)',
-        borderTop: '1px solid var(--border-light)',
-        background: 'var(--bg-primary)'
-      }}>
-        <p>מערכת ביקורים אצל סבתא © {new Date().getFullYear()}</p>
-      </footer>
+      <main className="main-content">{children}</main>
     </div>
-  )
-}
+  );
+};
 
-export default Layout
-export { Icons }
+export default Layout;

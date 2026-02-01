@@ -26,9 +26,8 @@ enum VisitStatus {
 
 /// סוגי תזכורות
 enum ReminderType {
-  SMS
-  EMAIL
-  BOTH
+  YEMOT  // הודעה קולית דרך ימות (Yemot) - זהו סוג התזכורת הפעיל כרגע
+  EMAIL  // שמור להרחבה עתידית: תזכורת בדוא"ל (כרגע לא ממומש)
 }
 
 /// סטטוסים של תזכורת
@@ -122,7 +121,7 @@ model Reminder {
   // פרטי התזכורת
   scheduledFor  DateTime       // מתי לשלוח
   message       String
-  type          ReminderType   @default(SMS)
+  type          ReminderType   @default(YEMOT)
   status        ReminderStatus @default(PENDING)
   sentAt        DateTime?
   

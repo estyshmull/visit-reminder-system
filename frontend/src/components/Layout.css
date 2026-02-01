@@ -1,0 +1,81 @@
+/* Layout.css - uses design variables from custom.css */
+
+:root { }
+
+.app-root {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-100);
+  color: var(--text-900);
+}
+
+.app-header {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: var(--bg);
+  border-bottom: 1px solid #EEF2FF;
+  box-shadow: var(--shadow-sm);
+  z-index: 30;
+}
+
+.app-sidebar {
+  width: 240px;
+  padding-top: 80px; /* account for header */
+  background: var(--bg);
+  border-right: 1px solid #EEF2FF;
+  min-height: 100vh;
+  box-shadow: none;
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 12px 8px;
+}
+
+.nav-item {
+  margin-bottom: 6px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  color: var(--text-700);
+  text-decoration: none;
+  border-radius: 10px;
+  transition: all 0.25s ease;
+}
+
+.nav-link:hover {
+  background: rgba(59,130,246,0.06);
+  color: var(--text-900);
+  transform: translateY(-1px);
+}
+
+.nav-link.active {
+  background: linear-gradient(90deg, rgba(59,130,246,0.12), rgba(139,92,246,0.06));
+  color: var(--text-900);
+  font-weight: 600;
+}
+
+.main-content {
+  flex: 1;
+  padding: 88px 28px 48px 28px; /* account for header */
+  background: var(--bg-100);
+  min-height: 100vh;
+}
+
+/* small screens: sidebar becomes top nav */
+@media (max-width: 800px) {
+  .app-sidebar { display: none; }
+  .main-content { padding: 100px 16px; }
+}

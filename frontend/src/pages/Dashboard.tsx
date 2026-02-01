@@ -151,10 +151,13 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div>
-      <h2 style={{ marginBottom: 'var(--spacing-lg)', fontSize: '2rem', color: 'var(--text-primary)' }}>
-        {Icons.dashboard} דשבורד
-      </h2>
+    <div className="container">
+      <div className="app-header" style={{ marginBottom: '20px' }}>
+        <h1 style={{ margin: 0 }}>{Icons.dashboard} דשבורד</h1>
+        <div>
+          <button className="btn">יצירת תזכורת</button>
+        </div>
+      </div>
 
       {error && (
         <Alert 
@@ -165,85 +168,50 @@ const Dashboard: React.FC = () => {
       )}
 
       {/* Statistics Cards */}
-      <div className="grid grid-4" style={{ marginBottom: 'var(--spacing-xl)' }}>
-        <Card 
-          title={stats.totalVisitors.toString()}
-          subtitle="סה״כ מבקרים"
-        >
-          <div style={{ fontSize: '3rem', textAlign: 'center' }}>
-            {Icons.visitors}
-          </div>
-        </Card>
+      <div className="grid grid-3" style={{ marginBottom: '32px' }}>
+        <div className="stats-card">
+          <div className="stats-title">סה״כ מבקרים</div>
+          <div className="stats-value">{stats.totalVisitors}</div>
+        </div>
 
-        <Card 
-          title={stats.activeVisitors.toString()}
-          subtitle="מבקרים פעילים"
-        >
-          <div style={{ fontSize: '3rem', textAlign: 'center' }}>
-            {Icons.check}
-          </div>
-        </Card>
+        <div className="stats-card">
+          <div className="stats-title">מבקרים פעילים</div>
+          <div className="stats-value">{stats.activeVisitors}</div>
+        </div>
 
-        <Card 
-          title={stats.upcomingVisits.toString()}
-          subtitle="ביקורים קרובים"
-        >
-          <div style={{ fontSize: '3rem', textAlign: 'center' }}>
-            {Icons.calendar}
-          </div>
-        </Card>
-
-        <Card 
-          title={stats.pendingReminders.toString()}
-          subtitle="תזכורות ממתינות"
-        >
-          <div style={{ fontSize: '3rem', textAlign: 'center' }}>
-            {Icons.reminders}
-          </div>
-        </Card>
+        <div className="stats-card">
+          <div className="stats-title">ביקורים קרובים</div>
+          <div className="stats-value">{stats.upcomingVisits}</div>
+        </div>
       </div>
 
       <div className="grid grid-2">
         {/* Upcoming Visits */}
         <Card title="ביקורים קרובים">
           {upcomingVisits.length === 0 ? (
-            <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: 'var(--spacing-lg)' }}>
+            <p className="muted" style={{ textAlign: 'center', padding: '20px' }}>
               אין ביקורים מתוזמנים בזמן הקרוב
             </p>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {upcomingVisits.map((visit) => {
                 const { date, time } = formatDateTime(visit.scheduledAt)
                 
                 return (
-                  <div 
-                    key={visit.id}
-                    style={{
-                      padding: 'var(--spacing-md)',
-                      border: '1px solid var(--border-light)',
-                      borderRadius: 'var(--radius-md)',
-                      background: 'var(--bg-secondary)',
-                    }}
-                  >
-                    <div style={{ 
-                      display: 'flex', 
-                      justifyContent: 'space-between', 
-                      alignItems: 'center',
-                      marginBottom: 'var(--spacing-sm)'
-                    }}>
-                      <h4 style={{ margin: 0, color: 'var(--text-primary)' }}>
-                        {visit.visitor.name}
-                      </h4>
+                  <div key={visit.id} className="card visitor-card">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div className="avatar">{visit.visitor.name[0]}</div>
+                        <div>
+                          <div style={{ fontWeight: 700 }}>{visit.visitor.name}</div>
+                          <div className="muted">{visit.visitor.phone}</div>
+                        </div>
+                      </div>
                       {getStatusBadge(visit.status)}
                     </div>
-                    
-                    <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
-                        {Icons.calendar} {date} בשעה {time}
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)', marginTop: 'var(--spacing-xs)' }}>
-                        {Icons.phone} {visit.visitor.phone}
-                      </div>
+
+                    <div style={{ marginTop: 12, color: 'var(--text-700)' }}>
+                      {Icons.calendar} {date} בשעה {time}
                     </div>
                   </div>
                 )
