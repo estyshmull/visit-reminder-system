@@ -47,3 +47,4 @@ prisma/migrations/
 .cache/
 temp/
 tmp/
+backend/.env.development
